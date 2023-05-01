@@ -3,6 +3,7 @@ package qb.lie.cityservice.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import qb.lie.cityservice.exception.CityAlreadyExistsException;
 import qb.lie.cityservice.exception.CityNotFoundException;
 import qb.lie.cityservice.model.City;
 import qb.lie.cityservice.service.CityService;
@@ -58,7 +59,8 @@ public class CityController {
         return new ResponseEntity<>(ex.getMessage(), NOT_FOUND);
     }
 
-    /**
-     * 1.54.00
-     */
+    @ExceptionHandler(CityAlreadyExistsException.class)
+    public ResponseEntity<String> handleCityAlreadyExistException(CityAlreadyExistsException ex){
+        return new ResponseEntity<>(ex.getMessage(), NOT_FOUND);
+    }
 }

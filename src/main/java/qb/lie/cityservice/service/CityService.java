@@ -2,6 +2,7 @@ package qb.lie.cityservice.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import qb.lie.cityservice.exception.CityAlreadyExistsException;
 import qb.lie.cityservice.exception.CityNotFoundException;
 import qb.lie.cityservice.model.City;
 import qb.lie.cityservice.repository.CityRepository;
@@ -16,11 +17,14 @@ public class CityService {
         if (name == null){
             return cityRepository.findAll();
         } else {
-            return cityRepository.findByName(name);
+            return cityRepository.findAllByName(name);
         }
     }
 
     public City createCity(City newCity) {
+        if (cityRepository.findByName(newCity.getName()).isPresent()){
+            throw new CityAlreadyExistsException("City already exist with name: "+newCity.getName());
+        }
         return cityRepository.save(newCity);
     }
 
